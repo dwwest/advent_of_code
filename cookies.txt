@@ -1,8 +1,0 @@
-# Netscape HTTP Cookie File
-# https://curl.haxx.se/rfc/cookie_spec.html
-# This is a generated file! Do not edit.
-
-#HttpOnly_.adventofcode.com	TRUE	/	TRUE	1985187230	session	53616c7465645f5f043f452491ccdaf8b64de5c4f47b510e8a240b04c30fa6ead57226d69a9ff046c5cb9e57e8913ab93351678255cb7a1490a68970ee3742c4
-.adventofcode.com	TRUE	/	FALSE	1732903181	_ga	GA1.2.216541738.1669749250
-.adventofcode.com	TRUE	/	FALSE	1669917581	_gid	GA1.2.1030493764.1669749250
-.adventofcode.com	TRUE	/	FALSE	1669831241	_gat	1
