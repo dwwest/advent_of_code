@@ -1,14 +1,18 @@
 import numpy as np
 
+""" IMPORT DATA """
 commands = []
 with open('input.txt','r') as f:
     for line in f:
         commands.append(line.strip('\n'))
 
+""" PART ONE """
+
 tree = {}
-dir_sizes = {}
 dir_list = []
-for line in commands[0:30]:
+size_dir = {}
+total_space = 0
+for line in commands:
     if line[0] == '$':
         if 'cd' in line:
             if line == '$ cd ..':
@@ -22,17 +26,30 @@ for line in commands[0:30]:
         for d in dir_list:
             current_directory = current_directory[d]
         to_add = line.split(' ')
-        if to_add[1] not in current_directory.keys():
-            if 'dir' in line:
-                current_directory[to_add[1]] = {}
-                dir_sizes[to_add[1]] = 0
-            else:
-                current_directory[to_add[1]] = int(to_add[0])
-                for d in dir_list:
-                    dir_sizes[d] += int(to_add[0])
+        if to_add[0] == 'dir':
+            current_directory[to_add[1]] = {}
+        else:
+            current_directory[to_add[1]] = int(to_add[0])
+            n = ''
+            for d in dir_list:
+                n += d + '/'
+                if n not in size_dir:
+                    size_dir[n] = 0
+                size_dir[n] += int(to_add[0])
+            total_space += int(to_add[0])
 
 total_sum = 0
-for d in dir_sizes.keys():
-    if dir_sizes[d] <= 100000:
-        total_sum += dir_sizes[d]
+for k in size_dir.keys():
+    if size_dir[k] <= 100000:
+        total_sum += size_dir[k]
 print(total_sum)
+
+""" PART TWO """
+
+space_needed = 30000000 - (70000000 - total_space)
+possible_dirs = []
+for k in size_dir.keys():
+    if size_dir[k] >= space_needed:
+        possible_dirs.append(size_dir[k])
+possible_dirs.sort()
+print(possible_dirs[0])
