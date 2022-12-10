@@ -9,6 +9,9 @@ with open('input.txt','r') as f:
 
 """ PART ONE """
 
+def sign(x):
+    ...
+
 h_pos = [0,0]
 t_pos = [0,0]
 t_pos_visited = []
@@ -45,10 +48,9 @@ for [move, num] in moves:
                     t_pos[0] -= 1
                 if h_pos[1] - t_pos[1] > 0.:
                     t_pos[1] += 1
-                    t_pos_visited.append(tuple(t_pos))
                 else:
                     t_pos[1] -= 1
-                    t_pos_visited.append(tuple(t_pos))
+                t_pos_visited.append(tuple(t_pos))
 
 print(len(list(set(t_pos_visited)))+1)
 
