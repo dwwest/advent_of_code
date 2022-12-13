@@ -1,3 +1,4 @@
+
 import numpy as np
 
 """ IMPORT DATA """
@@ -16,24 +17,35 @@ map_max_j = np.shape(map)[1]
 
 """ PART ONE """
 
-paths = [[np.concatenate(np.where(map == 0)).tolist()]]
-to_try = [[1, 0,], [-1, 0], [0, 1], [0, -1]]
-all_at_end = False
-while not all_at_end:
-    new_paths = []
-    for path in paths:
-        current_ind = path[-1]
-        new_inds = [list(np.array(current_ind) + np.array(n)) for n in to_try]
-        for t in new_inds:
-            if all(i >= 0 for i in t) and t not in path and t[0] < map_max_i and t[1] < map_max_j:
-                    if map[current_ind[0], current_ind[1]] + 1 == map[t[0], t[1]] or map[current_ind[0], current_ind[1]] == map[t[0], t[1]]:
-                        if t not in path:
-                            new_path = [p for p in path]
-                            new_path.append(t)
-                            new_paths.append(new_path)
-    paths = new_paths
-    if any(map[p[-1][0], p[-1][1]] == 27 for p in paths):
-        all_at_end = True
+def breadth_first(queue):
+    to_try = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+    explored = []
+    while len(queue) > 0:
+        current = queue.pop(0)
+        length = current[2]
+        if map[current[0], current[1]] == 27:
+            return(length)
+        for t in [[n[0]+current[0],n[1]+current[1]] for n in to_try]:
+            if 0 > t[0] or 0 > t[1] or t[0] >= map_max_i or t[1] >= map_max_j:
+                continue
+            if map[current[0], current[1]] + 1 < map[t[0], t[1]]:
+                continue
+            if t in explored:
+                continue
+            explored.append(t)
+            queue.append([t[0], t[1], length+1])
 
-print(min([len(p) for p in paths]) - 1)
+queue = [np.concatenate(np.where(map == 0)).tolist()]
+queue[0].append(0)
+print(breadth_first(queue))
 
+""" PART TWO """
+
+starts = np.where(map == 1)
+starts = [[starts[0][i],starts[1][i]] for i in range(np.shape(starts)[1])]
+hike_lengths = []
+for s in starts:
+    queue = [list(s)]
+    queue[0].append(0)
+    hike_lengths.append(breadth_first(queue))
+print(min(hike_lengths))
