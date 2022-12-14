@@ -1,5 +1,6 @@
 
 import numpy as np
+from collections import deque as de
 
 """ IMPORT DATA """
 
@@ -19,24 +20,25 @@ map_max_j = np.shape(map)[1]
 
 def breadth_first(queue):
     to_try = [[1, 0], [-1, 0], [0, 1], [0, -1]]
-    explored = []
+    explored = set()
     while len(queue) > 0:
-        current = queue.pop(0)
+        current = queue.popleft()
         length = current[2]
         if map[current[0], current[1]] == 27:
             return(length)
-        for t in [[n[0]+current[0],n[1]+current[1]] for n in to_try]:
+        for t in [(n[0]+current[0],n[1]+current[1]) for n in to_try]:
             if 0 > t[0] or 0 > t[1] or t[0] >= map_max_i or t[1] >= map_max_j:
                 continue
             if map[current[0], current[1]] + 1 < map[t[0], t[1]]:
                 continue
             if t in explored:
                 continue
-            explored.append(t)
+            explored.add(t)
             queue.append([t[0], t[1], length+1])
 
 queue = [np.concatenate(np.where(map == 0)).tolist()]
 queue[0].append(0)
+queue = de(queue)
 print(breadth_first(queue))
 
 """ PART TWO """
@@ -47,5 +49,5 @@ hike_lengths = []
 for s in starts:
     queue = [list(s)]
     queue[0].append(0)
-    hike_lengths.append(breadth_first(queue))
-print(min(hike_lengths))
+    hike_lengths.append(breadth_first(de(queue)))
+print(min([h for h in hike_lengths if h is not None]))
